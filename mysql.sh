@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# Simple script to install MariaDB on  6.x only 64bit
+# Simple script to install MariaDB on ubuntu only 64bit
 # By PhongLe - http://congdonglinux.vn
+source config.sh
 
 ## Check info
 cpucores=$( awk -F: '/model name/ {core++} END {print core}' /proc/cpuinfo )
@@ -17,17 +18,8 @@ vm.swappiness = 0
 END
 sysctl -p 
 
-##Create Repo MariaDB
-cat >> "/etc/yum.repos.d/MariaDB.repo" <<END
-[mariadb]
-name = MariaDB
-baseurl = http://yum.mariadb.org/10.0/centos6-amd64
-gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
-gpgcheck=1
-END
-
 ## Install MariaDB
-yum -y install MariaDB-server MariaDB-client
+apt-get install -y mariadb-server mariadb-client
 touch /var/log/mysql_slow.log
 chown mysql:mysql /var/log/mysql_slow.log
 
@@ -114,9 +106,9 @@ interactive-timeout
 END
 
 ##Tao password cho tai khoan root mysql
-printf "\nNhap vao password root mysql ban muon dat [ENTER]: "
-read rootmysql
-##Tao password random cho tai khoan root
+# printf "\nNhap vao password root mysql ban muon dat [ENTER]: "
+# read rootmysql
+# ##Tao password random cho tai khoan root
 ##root_password=`date |md5sum |cut -c '14-30'`
 
 rm -f /var/lib/mysql/ib_logfile0
@@ -125,17 +117,16 @@ rm -f /var/lib/mysql/ibdata1
 
 ## Start all service
 /etc/init.d/mysql start
-chkconfig mysql on
 
-mysqladmin -u root password "$rootmysql"
+mysqladmin -u root password "$rootmysqlpwd"
 
 ## Xoa cac user rong va database test
-mysql -u root -p"$rootmysql" -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost')"
-mysql -u root -p"$rootmysql" -e "DELETE FROM mysql.user WHERE User=''"
-mysql -u root -p"$rootmysql" -e "DROP DATABASE test"
-mysql -u root -p"$rootmysql" -e "FLUSH PRIVILEGES"
+mysql -u root -p"$rootmysqlpwd" -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost')"
+mysql -u root -p"$rootmysqlpwd" -e "DELETE FROM mysql.user WHERE User=''"
+mysql -u root -p"$rootmysqlpwd" -e "DROP DATABASE test"
+mysql -u root -p"$rootmysqlpwd" -e "FLUSH PRIVILEGES"
 
 clear
 echo -e "\n\n\n";
 echo "Thank you for use scripts ===  Install MariaDB  Successfully ";
-echo " Password root access mysql: $rootmysql "; 
+echo " Password root access mysql: $rootmysqlpwd "; 
