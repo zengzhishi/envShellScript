@@ -2,7 +2,7 @@
 
 Present_Path=`pwd`
 
-ORACLE_PATH="/home/oracle"
+ORACLE_BINARY_PATH="./"
 oracle_file1="linux.x64_11gR2_database_1of2.zip"
 oracle_file2="linux.x64_11gR2_database_2of2.zip"
 unzip ORACLE_PATH/oracle_file1
@@ -37,7 +37,9 @@ unixODBC-devel
 /usr/sbin/groupadd dba #(建立数据库安装组)
 # /usr/sbin/groupadd asmadmin #(建立ASM管理组)
 # /usr/sbin/groupadd asmdba #(建立Grid管理组)
-/usr/sbin/useradd -g oinstall -G dba -m oracle 
+/usr/sbin/useradd -g oinstall -G dba -m oracle -s /bin/bash
+
+mv ${ORACLE_BINARY_PATH}/database /home/oracle
 
 # ## save uid and gid for user oracle
 # uid=`id oracle|awk '{print $1}'|cut -d '=' -f 2|cut -d '(' -f 1`
