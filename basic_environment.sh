@@ -40,8 +40,8 @@ jdkInstall()
             echo ""
             echo "# oracle jdk environment" >> /etc/profile
             echo "export JAVA_HOME=/usr/local/jdk/jdk" >> /etc/profile
-            echo "export PATH=$JAVA_HOME/bin:$PATH" >> /etc/profile
-            echo "export CLASS_PATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar" >> /etc/profile
+            echo "export PATH=\$JAVA_HOME/bin:\$PATH" >> /etc/profile
+            echo "export CLASS_PATH=.:\$JAVA_HOME/lib/dt.jar:\$JAVA_HOME/lib/tools.jar" >> /etc/profile
             source /etc/profile
             java -version
             echo "Install successfully!"
@@ -83,7 +83,8 @@ tomcatInstall()
         mkdir -p /usr/local/tomcat
         mv ${TOMCAT_VERSION} /usr/local/tomcat
         ln -s /usr/local/tomcat/${TOMCAT_VERSION} /usr/local/tomcat/tomcat
-        useradd tomcat -s /bin/bash
+        groupadd tomcat
+        useradd tomcat -g tomcat -s /sbin/nologin -M
         chown -R tomcat:tomcat -f /usr/local/tomcat
         echo "Install successfully!"
         return
