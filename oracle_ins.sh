@@ -1,13 +1,20 @@
 #!/bin/bash
+## user use this script as root
+source /home/oracle/.bash_profile
 
-## Silent install oracle 
+su - oracle
+## Silent install oracle  use by oracle user
 cd /home/oracle/database
 source /home/oracle/.bash_profile
 ./runInstaller -silent -force -responseFile /home/oracle/etc/db_install.rsp
 
-## 
+## back to root user
+logout
+## use root user to configure
 /u01/app/oracle/product/11.2.0/db_1/root.sh
 
+## use oracle user
+su - oracle
 echo "export ORACLE_HOME=$ORACLE_BASE/product/11.2.0/db_1
 export TNS_ADMIN=$ORACLE_HOME/network/admin
 export PATH=.:${PATH}:$HOME/bin:$ORACLE_HOME/bin
@@ -30,11 +37,22 @@ source /home/oracle/.bash_profile
 ## Configure silent network
 $ORACLE_HOME/bin/netca /silent /responseFile /home/oracle/etc/netca.rsp
 
+HOST_FIELD="system-db"
 ## Configure slient db
-sed -i "s/GDBNAME=/GDBNAME=\"orcl.java-linux-test\"/g" /home/oracle/etc/dbca.rsp
+sed -i "s/GDBNAME = \"orcl11g.us.oracle.com\"/GDBNAME=\"orcl.$HOST_FIELD\"/g" /home/oracle/etc/dbca.rsp
 sed -i "s/SID = \"orcl11g\"/SID=\"orcl\"/g" /home/oracle/etc/dbca.rsp
-sed -i "s/#CHARACTERSET = \"US7ASCII\"/CHARACTERSET=\"AL32UTF8\"/g" /home/oracle/etc/dbca.rsp
-sed -i "s/#NATIONALCHARACTERSET= \"UTF8\"/NATIONALCHARACTERSET=\"UTF8\"/g" /home/oracle/etc/dbca.rsp
 
-$ORACLE_HOME/bin/dbca -silent -responseFile /home/oracle/dbca.rsp
+sed -i "s/#SYSPASSWORD = \"password\"/#SYSPASSWORD = \"orcl\"/g" /home/oracle/etc/dbca.rsp
+sed -i "s/#SYSTEMPASSWORD = \"password\"/#SYSTEMPASSWORD = \"orcl\"/g" /home/oracle/etc/dbca.rsp
 
+
+##########################################
+## ORACLE managers password             ##
+## sys: orcl                            ##
+## system: orcl                         ##
+##########################################
+
+$ORACLE_HOME/bin/dbca -silent -responseFile /home/oracle/etc/dbca.rsp
+
+## check status
+lsnrctl status

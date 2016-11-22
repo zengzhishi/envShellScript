@@ -5,8 +5,8 @@ Present_Path=`pwd`
 ORACLE_BINARY_PATH="./"
 oracle_file1="linux.x64_11gR2_database_1of2.zip"
 oracle_file2="linux.x64_11gR2_database_2of2.zip"
-unzip ORACLE_PATH/oracle_file1
-unzip ORACLE_PATH/oracle_file2
+unzip $ORACLE_BINARY_PATH/$oracle_file1
+unzip $ORACLE_BINARY_PATH/$oracle_file2
 
 ## install dependences
 yum install -y \
@@ -93,8 +93,8 @@ chown -R oracle:oinstall /u01/app/
 chmod -R 775 /u01/app/
 
 if [ ! -f /etc/oraInst.loc ];then
-    echo "nventory_loc=/u01/app/oracle/oraInventory
-    inst_group=oinstall" >> /etc/oraInst.loc
+    echo "nventory_loc=/u01/app/oracle/oraInventory 
+      inst_group=oinstall" >> /etc/oraInst.loc
 fi
 
 chown oracle:oinstall /etc/oraInst.loc
@@ -115,12 +115,12 @@ chmod 700 /home/oracle/etc/*.rsp
 sed -i "s/oracle.install.option=/oracle.install.option=INSTALL_DB_SWONLY/g" /home/oracle/etc/db_install.rsp
 sed -i "s/ORACLE_HOSTNAME=/ORACLE_HOSTNAME=java-linux-test/g" /home/oracle/etc/db_install.rsp
 sed -i "s/UNIX_GROUP_NAME=/UNIX_GROUP_NAME=oinstall/g" /home/oracle/etc/db_install.rsp
-sed -i "s/INVENTORY_LOCATION=/INVENTORY_LOCATION=/u01/app/oracle/oraInventory/g" /home/oracle/etc/db_install.rsp
+sed -i "s/INVENTORY_LOCATION=/INVENTORY_LOCATION=\/u01\/app\/oracle\/oraInventory/g" /home/oracle/etc/db_install.rsp
 sed -i "s/SELECTED_LANGUAGES=/SELECTED_LANGUAGES=en,zh_CN,zh_TW/g" /home/oracle/etc/db_install.rsp
-sed -i "s/ORACLE_HOME=/ORACLE_HOME=/u01/app/oracle/product/11.2.0/db_1/g" /home/oracle/etc/db_install.rsp
-sed -i "s/ORACLE_BASE=/ORACLE_BASE=/u01/app/oracle/g" /home/oracle/etc/db_install.rsp
+sed -i "s/ORACLE_HOME=/ORACLE_HOME=\/u01\/app\/oracle\/product\/11.2.0\/db_1/g" /home/oracle/etc/db_install.rsp
+sed -i "s/ORACLE_BASE=/ORACLE_BASE=\/u01\/app\/oracle/g" /home/oracle/etc/db_install.rsp
 sed -i "s/oracle.install.db.InstallEdition=/oracle.install.db.InstallEdition=EE/g" /home/oracle/etc/db_install.rsp
-sed -i "s/oracle.install.db.isCustomInstall=/oracle.install.db.isCustomInstall=true/g" /home/oracle/etc/db_install.rsp
+sed -i "s/oracle.install.db.isCustomInstall=false/oracle.install.db.isCustomInstall=true/g" /home/oracle/etc/db_install.rsp
 sed -i "s/oracle.install.db.DBA_GROUP=/oracle.install.db.DBA_GROUP=dba/g" /home/oracle/etc/db_install.rsp
 sed -i "s/oracle.install.db.OPER_GROUP=/oracle.install.db.OPER_GROUP=oinstall/g" /home/oracle/etc/db_install.rsp
 sed -i "s/oracle.install.db.config.starterdb.type=/oracle.install.db.config.starterdb.type=GENERAL_PURPOSE/g" /home/oracle/etc/db_install.rsp
