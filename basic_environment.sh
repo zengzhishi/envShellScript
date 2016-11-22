@@ -22,14 +22,15 @@ TOMCAT_VERSION="apache-tomcat-8.0.38"
 ## Install oracle jdk environment                             ##
 ## It has two type of install pakages: .tar.gz, .rpm          ##
 ################################################################
-fucntion jdkInstall()
+jdkInstall()
 {
     BitType=$1
     ## Check install pakage type.
-    pakages=$(ls ./pakages/$JDK_VERSION)
-    for file in pakages
+    pakages=$(ls ./pakages/$JDK_VERSION*)
+    for file in ${pakages}
     do
-        if [ ${JDK_VERSION}-${BitType}${gz_suffix} = ${file} ]
+        fileName=$(echo $file | cut -d '/' -f 3)
+        if [ ${JDK_VERSION}-${BitType}${gz_suffix} = ${fileName} ]
         then
             # install jdk environment by achieve package
             tar -zxvf ${file}
@@ -42,12 +43,13 @@ fucntion jdkInstall()
             echo "export PATH=$JAVA_HOME/bin:$PATH" >> /etc/profile
             echo "export CLASS_PATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar" >> /etc/profile
             source /etc/profile
+            java -version
             echo "Install successfully!"
             return
-        else if [ ${JDK_VERSION}-${BitType}${rpm_suffix} = ${file} ]
+        elif [ ${JDK_VERSION}-${BitType}${rpm_suffix} = ${fileName} ]
         then 
             # install jdk environment by rpm
-            rpm -ivh ${JDK_VERSION}-${BitType}.${rpm_suffix}
+            rpm -ivh ./pakages/${JDK_VERSION}-${BitType}${rpm_suffix}
             echo "Install successfully!"        
             return
         fi
@@ -62,17 +64,19 @@ fucntion jdkInstall()
 ## Install tomcat environment                                 ##
 ## It has two type of install pakages: .tar.gz, .zip          ##
 ################################################################
-fucntion jdkInstall()
+tomcatInstall()
 {
     BitType=$1
-    pakages=$(ls ./pakages/$TOMCAT_VERSION)
-    for file in pakages
+    pakages=$(ls ./pakages/$TOMCAT_VERSION*)
+    for file in ${pakages}
     do
-        if [ ${TOMCAT_VERSION}.${gz_suffix} = ${file} ]
+        fileName=$(echo $file | cut -d '/' -f 3)
+        if [ ${TOMCAT_VERSION}${gz_suffix} = ${fileName} ]
         then
-            tar -zxvf ${TOMCAT_VERSION}.${gz_suffix}
-        else if [ ${TOMCAT_VERSION}.${gz_suffix} = ${file} ]
-            unzip ${TOMCAT_VERSION}.${zip_suffix}
+            tar -zxvf ${file}
+        elif [ ${TOMCAT_VERSION}${gz_suffix} = ${fileName} ]
+        then
+            unzip ${file}
         else
             continue
         fi
@@ -90,16 +94,17 @@ fucntion jdkInstall()
 
 
 ## Check computor bit type
-    BIT=${getconf LONG_BIT}
-    if [ $BIT -eq 64]; then
-        BitType=${X64Bit_Type}
-    else
-        BitType=${X86Bit_Type}
-    fi
+BIT=$(getconf LONG_BIT)
+if [ $BIT -eq 64 ]
+then
+    BitType=${X64Bit_Type}
+else
+    BitType=${X86Bit_Type}
+fi
 
 ## Check jdk environment
 echo "Checking JDK environment..."
-checkResult=${rpm -qa | grep java}
+checkResult=$(rpm -qa | grep java)
 if [ ! -n checkResult ]; then
     echo "Java environment has been exist!"
 else 
@@ -115,5 +120,4 @@ else
     tomcatInstall ${BitType}
 fi
 echo "Tomcat environment install complete!"
-
-
+exit
