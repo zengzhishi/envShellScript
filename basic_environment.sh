@@ -13,21 +13,18 @@ X64Bit_Type="x64"
 X86Bit_Type="i586"
 gz_suffix=".tar.gz"
 rpm_suffix=".rpm"
+zip_suffix=".zip"
+TOMCAT_VERSION="apache-tomcat-8.0.38"
+
 
 
 ################################################################
 ## Install oracle jdk environment                             ##
+## It has two type of install pakages: .tar.gz, .rpm          ##
 ################################################################
 fucntion jdkInstall()
 {
-    ## Check computor bit type
-    BIT=${getconf LONG_BIT}
-    if [ $BIT -eq 64]; then
-        BitType=${X64Bit_Type}
-    else
-        BitType=${X86Bit_Type}
-    fi
-
+    BitType=$1
     ## Check install pakage type.
     pakages=$(ls ./pakages/$JDK_VERSION)
     for file in pakages
@@ -57,11 +54,48 @@ fucntion jdkInstall()
     done
     echo "No accessible jdk install pakage"
     exit
-
 }
 
 
 
+################################################################
+## Install tomcat environment                                 ##
+## It has two type of install pakages: .tar.gz, .zip          ##
+################################################################
+fucntion jdkInstall()
+{
+    BitType=$1
+    pakages=$(ls ./pakages/$TOMCAT_VERSION)
+    for file in pakages
+    do
+        if [ ${TOMCAT_VERSION}.${gz_suffix} = ${file} ]
+        then
+            tar -zxvf ${TOMCAT_VERSION}.${gz_suffix}
+        else if [ ${TOMCAT_VERSION}.${gz_suffix} = ${file} ]
+            unzip ${TOMCAT_VERSION}.${zip_suffix}
+        else
+            continue
+        fi
+        mkdir -p /usr/local/tomcat
+        mv ${TOMCAT_VERSION} /usr/local/tomcat
+        ln -s /usr/local/tomcat/${TOMCAT_VERSION} /usr/local/tomcat/tomcat
+        useradd tomcat -s /bin/bash
+        chown -R tomcat:tomcat -f /usr/local/tomcat
+        echo "Install successfully!"
+        return
+    done
+    echo "No accessible tomcat install pakage"
+    exit
+}
+
+
+## Check computor bit type
+    BIT=${getconf LONG_BIT}
+    if [ $BIT -eq 64]; then
+        BitType=${X64Bit_Type}
+    else
+        BitType=${X86Bit_Type}
+    fi
 
 ## Check jdk environment
 echo "Checking JDK environment..."
@@ -69,11 +103,17 @@ checkResult=${rpm -qa | grep java}
 if [ ! -n checkResult ]; then
     echo "Java environment has been exist!"
 else 
-    jdkInstall
+    jdkInstall ${BitType}
 fi
 echo "Jdk environment install complete!"
 
 ## Check tomcat environment
 echo "Checking tomcat environment..."
+if [ -d /usr/local/tomcat ]; then
+    echo "Tomcat environment has been exist!"
+else
+    tomcatInstall ${BitType}
+fi
+echo "Tomcat environment install complete!"
 
 
