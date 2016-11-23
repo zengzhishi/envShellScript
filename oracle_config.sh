@@ -3,6 +3,7 @@
 ################################################################
 ## This script will configure oracle11gR2 environment before  ##
 ## install.                                                   ##
+## Require environment: CentOS 7.2                            ##
 ## Author: zzs                                                ##
 ## Date: 2016.11.20                                           ##
 ################################################################

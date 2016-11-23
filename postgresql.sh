@@ -1,4 +1,10 @@
 #!/bin/bash
+################################################################
+## This script will install postgresql.                       ##
+## Require environment: CentOS 7.2                            ##
+## Author: zzs                                                ##
+## Date: 2016.11.19                                           ##
+################################################################
 
 source config.sh
 

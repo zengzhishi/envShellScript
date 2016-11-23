@@ -3,6 +3,7 @@
 ################################################################
 ## This script will install oracle11gR2 database              ##
 ## for znsh as a system db.                                   ##
+## Require environment: CentOS 7.2                            ##
 ## Author: zzs                                                ##
 ## Date: 2016.11.21                                           ##
 ################################################################
