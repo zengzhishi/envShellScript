@@ -2,11 +2,12 @@
 ## user use this script as root
 source /home/oracle/.bash_profile
 
-su - oracle
+
 ## Silent install oracle  use by oracle user
-cd /home/oracle/database
+su - oracle
+cd ~
 source /home/oracle/.bash_profile
-./runInstaller -silent -force -responseFile /home/oracle/etc/db_install.rsp
+./runInstaller -silent -force -responseFile /home/oracle/etc/db_install.rsp -ignorePrereq
 
 ## back to root user
 logout

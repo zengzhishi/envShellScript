@@ -111,24 +111,24 @@ cd /home/oracle
 mkdir etc
 cp /home/oracle/database/response/* /home/oracle/etc/
 chmod 700 /home/oracle/etc/*.rsp
-
-sed -i "s/oracle.install.option=/oracle.install.option=INSTALL_DB_SWONLY/g" /home/oracle/etc/db_install.rsp
-sed -i "s/ORACLE_HOSTNAME=/ORACLE_HOSTNAME=java-linux-test/g" /home/oracle/etc/db_install.rsp
-sed -i "s/UNIX_GROUP_NAME=/UNIX_GROUP_NAME=oinstall/g" /home/oracle/etc/db_install.rsp
-sed -i "s/INVENTORY_LOCATION=/INVENTORY_LOCATION=\/u01\/app\/oracle\/oraInventory/g" /home/oracle/etc/db_install.rsp
-sed -i "s/SELECTED_LANGUAGES=/SELECTED_LANGUAGES=en,zh_CN,zh_TW/g" /home/oracle/etc/db_install.rsp
-sed -i "s/ORACLE_HOME=/ORACLE_HOME=\/u01\/app\/oracle\/product\/11.2.0\/db_1/g" /home/oracle/etc/db_install.rsp
-sed -i "s/ORACLE_BASE=/ORACLE_BASE=\/u01\/app\/oracle/g" /home/oracle/etc/db_install.rsp
-sed -i "s/oracle.install.db.InstallEdition=/oracle.install.db.InstallEdition=EE/g" /home/oracle/etc/db_install.rsp
-sed -i "s/oracle.install.db.isCustomInstall=false/oracle.install.db.isCustomInstall=true/g" /home/oracle/etc/db_install.rsp
-sed -i "s/oracle.install.db.DBA_GROUP=/oracle.install.db.DBA_GROUP=dba/g" /home/oracle/etc/db_install.rsp
-sed -i "s/oracle.install.db.OPER_GROUP=/oracle.install.db.OPER_GROUP=oinstall/g" /home/oracle/etc/db_install.rsp
-sed -i "s/oracle.install.db.config.starterdb.type=/oracle.install.db.config.starterdb.type=GENERAL_PURPOSE/g" /home/oracle/etc/db_install.rsp
-sed -i "s/oracle.install.db.config.starterdb.globalDBName=/oracle.install.db.config.starterdb.globalDBName=orcl/g" /home/oracle/etc/db_install.rsp
-sed -i "s/oracle.install.db.config.starterdb.SID=/oracle.install.db.config.starterdb.SID=orcl/g" /home/oracle/etc/db_install.rsp
-sed -i "s/oracle.install.db.config.starterdb.memoryLimit=/oracle.install.db.config.starterdb.memoryLimit=512/g" /home/oracle/etc/db_install.rsp
-sed -i "s/oracle.install.db.config.starterdb.password.ALL=/oracle.install.db.config.starterdb.password.ALL=oracle/g" /home/oracle/etc/db_install.rsp
-sed -i "s/DECLINE_SECURITY_UPDATES=/DECLINE_SECURITY_UPDATES=true/g" /home/oracle/etc/db_install.rsp
+DB_INSTALL_PATH="/home/oracle/etc/db_install.rsp"
+sed -i "s/oracle.install.option=/oracle.install.option=INSTALL_DB_SWONLY/g" $DB_INSTALL_PATH
+sed -i "s/ORACLE_HOSTNAME=/ORACLE_HOSTNAME=db-system/g" $DB_INSTALL_PATH
+sed -i "s/UNIX_GROUP_NAME=/UNIX_GROUP_NAME=oinstall/g" $DB_INSTALL_PATH
+sed -i "s/INVENTORY_LOCATION=/INVENTORY_LOCATION=\/u01\/app\/oracle\/oraInventory/g" $DB_INSTALL_PATH
+sed -i "s/SELECTED_LANGUAGES=/SELECTED_LANGUAGES=en,zh_CN,zh_TW/g" $DB_INSTALL_PATH
+sed -i "s/ORACLE_HOME=/ORACLE_HOME=\/u01\/app\/oracle\/product\/11.2.0\/db_1/g" $DB_INSTALL_PATH
+sed -i "s/ORACLE_BASE=/ORACLE_BASE=\/u01\/app\/oracle/g" $DB_INSTALL_PATH
+sed -i "s/oracle.install.db.InstallEdition=/oracle.install.db.InstallEdition=EE/g" $DB_INSTALL_PATH
+sed -i "s/oracle.install.db.isCustomInstall=false/oracle.install.db.isCustomInstall=true/g" $DB_INSTALL_PATH
+sed -i "s/oracle.install.db.DBA_GROUP=/oracle.install.db.DBA_GROUP=dba/g" $DB_INSTALL_PATH
+sed -i "s/oracle.install.db.OPER_GROUP=/oracle.install.db.OPER_GROUP=oinstall/g" $DB_INSTALL_PATH
+sed -i "s/oracle.install.db.config.starterdb.type=/oracle.install.db.config.starterdb.type=GENERAL_PURPOSE/g" $DB_INSTALL_PATH
+sed -i "s/oracle.install.db.config.starterdb.globalDBName=/oracle.install.db.config.starterdb.globalDBName=orcl/g" $DB_INSTALL_PATH
+sed -i "s/oracle.install.db.config.starterdb.SID=/oracle.install.db.config.starterdb.SID=orcl/g" $DB_INSTALL_PATH
+sed -i "s/oracle.install.db.config.starterdb.memoryLimit=/oracle.install.db.config.starterdb.memoryLimit=512/g" $DB_INSTALL_PATH
+sed -i "s/oracle.install.db.config.starterdb.password.ALL=/oracle.install.db.config.starterdb.password.ALL=oracle/g" $DB_INSTALL_PATH
+sed -i "s/DECLINE_SECURITY_UPDATES=/DECLINE_SECURITY_UPDATES=true/g" $DB_INSTALL_PATH
 
 cd $Present_Path
 echo "Oracle configure successful."
