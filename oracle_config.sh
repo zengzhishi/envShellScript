@@ -1,14 +1,31 @@
 #!/bin/bash
 
+################################################################
+## This script will configure oracle11gR2 environment before  ##
+## install.                                                   ##
+## Author: zzs                                                ##
+## Date: 2016.11.20                                           ##
+################################################################
+
+
+## Check oracle environment
+checkOracle=$(su - oracle -c 'sqlplus -v')
+if [ -n "${checkOracle}" ]; then
+      echo "Oracle has been installed!"
+      exit
+fi
+
+## Save pwd
 Present_Path=`pwd`
 
+## Extract linux.x64_11gR2_database
 ORACLE_BINARY_PATH="./"
 oracle_file1="linux.x64_11gR2_database_1of2.zip"
 oracle_file2="linux.x64_11gR2_database_2of2.zip"
 unzip $ORACLE_BINARY_PATH/$oracle_file1
 unzip $ORACLE_BINARY_PATH/$oracle_file2
 
-## install dependences
+## Install dependences for oracle database
 yum install -y \
 binutils \
 compat-libstdc++-33 \

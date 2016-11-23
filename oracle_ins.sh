@@ -1,6 +1,14 @@
 #!/bin/bash
-## user use this script as root
-source /home/oracle/.bash_profile
+
+################################################################
+## This script will install oracle11gR2 database              ##
+## for znsh as a system db.                                   ##
+## Author: zzs                                                ##
+## Date: 2016.11.21                                           ##
+################################################################
+
+# ## user use this script as root
+# source /home/oracle/.bash_profile
 
 
 ## Silent install oracle  use by oracle user
@@ -38,8 +46,16 @@ source /home/oracle/.bash_profile
 ## Configure silent network
 $ORACLE_HOME/bin/netca /silent /responseFile /home/oracle/etc/netca.rsp
 
-HOST_FIELD="system-db"
+
+##########################################
+## ORACLE managers password             ##
+## hostname: system-db                  ##
+## sys: orcl                            ##
+## system: orcl                         ##
+##########################################
 ## Configure slient db
+HOST_FIELD="system-db"
+
 sed -i "s/GDBNAME = \"orcl11g.us.oracle.com\"/GDBNAME=\"orcl.$HOST_FIELD\"/g" /home/oracle/etc/dbca.rsp
 sed -i "s/SID = \"orcl11g\"/SID=\"orcl\"/g" /home/oracle/etc/dbca.rsp
 
@@ -47,11 +63,7 @@ sed -i "s/#SYSPASSWORD = \"password\"/#SYSPASSWORD = \"orcl\"/g" /home/oracle/et
 sed -i "s/#SYSTEMPASSWORD = \"password\"/#SYSTEMPASSWORD = \"orcl\"/g" /home/oracle/etc/dbca.rsp
 
 
-##########################################
-## ORACLE managers password             ##
-## sys: orcl                            ##
-## system: orcl                         ##
-##########################################
+
 
 $ORACLE_HOME/bin/dbca -silent -responseFile /home/oracle/etc/dbca.rsp
 
