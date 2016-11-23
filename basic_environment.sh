@@ -83,9 +83,9 @@ tomcatInstall()
         mkdir -p /usr/local/tomcat
         mv ${TOMCAT_VERSION} /usr/local/tomcat
         ln -s /usr/local/tomcat/${TOMCAT_VERSION} /usr/local/tomcat/tomcat
-        groupadd tomcat
-        useradd tomcat -g tomcat -s /sbin/nologin -M
-        chown -R tomcat:tomcat -f /usr/local/tomcat
+        adduser tomcat
+        chown -R tomcat:tomcat /usr/local/tomcat
+        echo "su - tomcat -c '/usr/local/tomcat/tomcat/bin/startup.sh'" >> /etc/rc.local
         echo "Install successfully!"
         return
     done
@@ -106,7 +106,7 @@ fi
 ## Check jdk environment
 echo "Checking JDK environment..."
 checkResult=$(rpm -qa | grep java)
-if [ ! -n checkResult ]; then
+if [ ! -n checkResult -o -d /usr/local/jdk ]; then
     echo "Java environment has been exist!"
 else 
     jdkInstall ${BitType}
@@ -120,5 +120,9 @@ if [ -d /usr/local/tomcat ]; then
 else
     tomcatInstall ${BitType}
 fi
+
+## Apply changed environment
+source /etc/profile
+source /etc/rc.local
 echo "Tomcat environment install complete!"
 exit
