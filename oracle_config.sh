@@ -64,7 +64,13 @@ mv ${ORACLE_BINARY_PATH}/database /home/oracle
 # gid=`id oracle|awk '{print $2}'|cut -d '=' -f 2|cut -d '(' -f 1`
 
 ## comfigure sysctl config file.
-echo "
+
+grep "# Oracle configuration" /etc/sysctl.conf >> /dev/null
+if [ $? -eq 0 ]; then
+  echo "/etc/sysctl.conf has configured."
+else
+  echo "
+# Oracle configuration
 fs.aio-max-nr = 1048576
 fs.file-max = 6815744
 kernel.shmall = 2097152
@@ -76,28 +82,47 @@ net.core.rmem_default = 262144
 net.core.rmem_max = 4194304
 net.core.wmem_default = 262144
 net.core.wmem_max = 1048586
-" >> /etc/sysctl.conf
+      " >> /etc/sysctl.conf
+fi
 
 /sbin/sysctl -p #(设置参数立即生效)
 
 ## configure security setting of oracle user
-echo "oracle    soft    nproc   2047" >> /etc/security/limits.conf
-echo "oracle    hard    nproc   16384" >> /etc/security/limits.conf
-echo "oracle    soft    nofile  1024" >> /etc/security/limits.conf
-echo "oracle    hard    nofile  65536" >> /etc/security/limits.conf
-echo "oracle    soft    stack   10240" >> /etc/security/limits.conf
+grep "# Oracle configuration" /etc/security/limits.conf >> /dev/null
+if [ $? -eq 0 ]; then
+      echo "/etc/security/limits.conf has configured."
+else
+      echo "# Oracle configuration" >> /etc/security/limits.conf
+      echo "oracle    soft    nproc   2047" >> /etc/security/limits.conf
+      echo "oracle    hard    nproc   16384" >> /etc/security/limits.conf
+      echo "oracle    soft    nofile  1024" >> /etc/security/limits.conf
+      echo "oracle    hard    nofile  65536" >> /etc/security/limits.conf
+      echo "oracle    soft    stack   10240" >> /etc/security/limits.conf
+fi
 
-echo "session required /lib/security/pam_limits.so" >> /etc/pam.d/login
-echo "session    required     pam_limits.so" >> /etc/pam.d/login
+grep "# Oracle configuration" /etc/pam.d/login >> /dev/null
+if [ $? -eq 0 ]; then
+      echo "/etc/pam.d/login has configured."
+else
+      echo "# Oracle configuration" >> /etc/pam.d/login
+      echo "session required /lib/security/pam_limits.so" >> /etc/pam.d/login
+      echo "session    required     pam_limits.so" >> /etc/pam.d/login
+fi
 
-echo "if [ $USER = "oracle" ]; then
-        if [ $SHELL = "/bin/ksh" ]; then
-              ulimit -p 16384
-              ulimit -n 65536
-        else
-              ulimit -u 16384 -n 65536
-        fi
+grep "# Oracle configuration" /etc/sysctl.conf >> /dev/null
+if [ $? -eq 0 ]; then
+      echo "/etc/profile has configured."
+else
+      echo "# Oracle configuration" >> /etc/profile
+      echo "if [ $USER = "oracle" ]; then
+if [ $SHELL = "/bin/ksh" ]; then
+      ulimit -p 16384
+      ulimit -n 65536
+else
+      ulimit -u 16384 -n 65536
+fi
 fi" >> /etc/profile
+fi
 
 source /etc/profile
 
@@ -110,17 +135,23 @@ mkdir -p /u01/app/
 chown -R oracle:oinstall /u01/app/
 chmod -R 775 /u01/app/
 
+## create oraInst.loc config file and change file mode
 if [ ! -f /etc/oraInst.loc ];then
-    echo "nventory_loc=/u01/app/oracle/oraInventory 
-      inst_group=oinstall" >> /etc/oraInst.loc
+      echo "nventory_loc=/u01/app/oracle/oraInventory" >> /etc/oraInst.loc
+      echo "inst_group=oinstall" >> /etc/oraInst.loc
+      chown oracle:oinstall /etc/oraInst.loc
+      chmod 664 /etc/oraInst.loc
 fi
 
-chown oracle:oinstall /etc/oraInst.loc
-chmod 664 /etc/oraInst.loc
-
 ## configure oracle user profile
-echo "export ORACLE_BASE=/u01/app/oracle" >> /home/oracle/.bash_profile
-echo "export ORACLE_SID=orcl" >> /home/oracle/.bash_profile
+grep "# Oracle configuration" /etc/sysctl.conf >> /dev/null
+if [ $? -eq 0 ]; then
+      echo "/etc/profile has configured."
+else
+      echo "# Oracle configuration" >> /home/oracle/.bash_profile
+      echo "export ORACLE_BASE=/u01/app/oracle" >> /home/oracle/.bash_profile
+      echo "export ORACLE_SID=orcl" >> /home/oracle/.bash_profile
+fi
 
 source /home/oracle/.bash_profile
 
