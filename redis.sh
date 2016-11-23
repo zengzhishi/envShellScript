@@ -40,6 +40,7 @@ mkdir -p /usr/local/redis/etc
 
 mv ../../redis-${REDIS_VERSION}/redis.conf /usr/local/redis/etc
 cd ../../redis-${REDIS_VERSION}/src
+## redis-check-dump seems not exist.
 mv mkreleasehdr.sh redis-benchmark redis-check-aof redis-check-dump redis-cli redis-server /usr/local/redis/bin
 
 ## Set redis to be daemo process
