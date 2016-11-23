@@ -13,13 +13,11 @@
 
 
 ## Silent install oracle  use by oracle user
-su - oracle
-cd ~
 source /home/oracle/.bash_profile
-./runInstaller -silent -force -responseFile /home/oracle/etc/db_install.rsp -ignorePrereq
+su - oracle -c '/home/oracle/database/runInstaller -silent -force -responseFile /home/oracle/etc/db_install.rsp -ignorePrereq'
 
-## back to root user
-logout
+# ## back to root user
+# logout
 ## use root user to configure
 /u01/app/oracle/product/11.2.0/db_1/root.sh
 
@@ -63,10 +61,12 @@ sed -i "s/SID = \"orcl11g\"/SID=\"orcl\"/g" /home/oracle/etc/dbca.rsp
 sed -i "s/#SYSPASSWORD = \"password\"/#SYSPASSWORD = \"orcl\"/g" /home/oracle/etc/dbca.rsp
 sed -i "s/#SYSTEMPASSWORD = \"password\"/#SYSTEMPASSWORD = \"orcl\"/g" /home/oracle/etc/dbca.rsp
 
-
-
-
 $ORACLE_HOME/bin/dbca -silent -responseFile /home/oracle/etc/dbca.rsp
 
 ## check status
 lsnrctl status
+
+## back to root user
+logout
+echo "Install oracle complete!"
+exit
