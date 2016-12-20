@@ -8,3 +8,11 @@
     
 3. `basic_environment.sh` will instll jdk and tomcat environment.
 4. `postgresql.sh` install postgresql database by yum.
+
+
+Please exec java_env.sh using:
+
+
+        # source ./java_env.sh
+        or
+        # . ./java_env.sh
