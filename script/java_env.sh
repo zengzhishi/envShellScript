@@ -71,12 +71,19 @@ fi
 
 ## Check jdk environment
 echo "Checking JDK environment..."
-checkResult=$(rpm -qa | grep java)
-if [ ! -n checkResult -o -d /usr/local/jdk ]; then
-    echo "Java environment has been exist!"
-else 
-    jdkInstall ${BitType}
+if [ -z "$JAVA_HOME" ]; then
+    JAVA_BIN="`which java 2>/dev/null || type java 2>&1`"
+    if [ -x "$JAVA_BIN" ]; then
+        echo "Java environment has been install."
+        exit
+    fi
+else
+    echo "Java environment has been install."
+    exit
 fi
+
+## Start install jdk environment
+jdkInstall ${BitType}
 
 ## Apply changed environment
 source /etc/profile
